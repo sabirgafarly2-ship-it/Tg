@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0B1220" />
+
+  <!--
+    ✅ Быстрая настройка (замени значения ниже):
+    1) CHANNEL_NAME — название канала
+    2) CHANNEL_HANDLE — @username
+    3) TG_LINK — ссылка на канал
+    4) HERO_TAGLINE — короткий слоган
+    5) OWNER_NAME — имя автора/команды
+  -->
+
+  <title>Канал про бизнес и финансы — подписывайся в Telegram</title>
+  <meta name="description" content="Разборы идей, деньги, бизнес, инвестиции — коротко, по делу и без воды. Подписывайся в Telegram." />
+
+  <!-- Open Graph (для красивого превью в соцсетях) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Канал про бизнес и финансы" />
+  <meta property="og:description" content="Разборы идей, деньги, бизнес, инвестиции — коротко, по делу и без воды." />
+  <meta property="og:image" content="https://dummyimage.com/1200x630/0b1220/ffffff&text=Telegram+Channel" />
+  <meta property="og:url" content="https://example.com" />
+
+  <style>
+    :root{
+      --bg:#070B14;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --brand1:#39D98A; /* зелёный */
+      --brand2:#5B8CFF; /* синий */
+      --brand3:#F7C948; /* золотой */
+      --danger:#FF6B6B;
+      --shadow: 0 20px 60px rgba(0,0,0,.55);
+      --shadow2: 0 18px 40px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1120px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: var(--font);
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(91,140,255,.24), transparent 60%),
+                  radial-gradient(1000px 500px at 90% 20%, rgba(57,217,138,.18), transparent 55%),
+                  radial-gradient(1100px 650px at 55% 100%, rgba(247,201,72,.14), transparent 55%),
+                  var(--bg);
+      overflow-x:hidden;
+    }
+
+    a{ color: inherit; text-decoration:none; }
+    .container{ width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+
+    /* Subtle animated noise overlay */
+    .noise{
+      pointer-events:none;
+      position:fixed; inset:0;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" stitchTiles="stitch"/></filter><rect width="140" height="140" filter="url(%23n)" opacity=".12"/></svg>');
+      mix-blend-mode: overlay;
+      opacity:.35;
+      animation: drift 10s linear infinite;
+    }
+    @keyframes drift{
+      from{ transform: translate3d(0,0,0); }
+      to{ transform: translate3d(-2%, -2%, 0); }
+    }
+
+    /* Top nav */
+    .nav{
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to bottom, rgba(7,11,20,.72), rgba(7,11,20,.30));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 0;
+      gap: 12px;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      min-width: 210px;
+    }
+    .logo{
+      width: 36px; height:36px;
+      border-radius: 12px;
+      background: radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.38), transparent 55%),
+                  linear-gradient(135deg, rgba(91,140,255,.95), rgba(57,217,138,.90));
+      box-shadow: 0 16px 40px rgba(91,140,255,.15);
+      position:relative;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .logo::after{
+      content:"";
+      position:absolute; inset:8px;
+      border-radius: 10px;
+      background: radial-gradient(10px 10px at 60% 40%, rgba(247,201,72,.65), transparent 60%),
+                  rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .brand-text{ line-height:1.05; }
+    .brand-text .name{ font-weight:800; letter-spacing:.2px; }
+    .brand-text .handle{ font-size: 12px; color: var(--muted2); }
+
+    .nav-links{ display:flex; gap: 18px; align-items:center; }
+    .nav-links a{ color: var(--muted); font-size: 14px; padding: 10px 10px; border-radius: 12px; }
+    .nav-links a:hover{ color: var(--text); background: rgba(255,255,255,.06); }
+
+    .cta{
+      display:flex; align-items:center; gap: 10px;
+    }
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      border-radius: 14px;
+      padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      font-weight:700;
+      font-size: 14px;
+      box-shadow: 0 14px 30px rgba(0,0,0,.25);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.20); }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(91,140,255,.95), rgba(57,217,138,.92));
+      border-color: rgba(255,255,255,.18);
+      box-shadow: 0 18px 40px rgba(57,217,138,.14), 0 18px 40px rgba(91,140,255,.14);
+    }
+    .btn-primary:hover{ background: linear-gradient(135deg, rgba(91,140,255,1), rgba(57,217,138,1)); }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size: 13px;
+      color: rgba(255,255,255,.80);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+    .dot{
+      width: 8px; height:8px; border-radius: 99px;
+      background: var(--brand1);
+      box-shadow: 0 0 0 6px rgba(57,217,138,.10);
+    }
+
+    /* Hero */
+    .hero{
+      padding: 54px 0 14px;
+      position:relative;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .h1{
+      font-size: clamp(30px, 4.2vw, 54px);
+      line-height: 1.02;
+      letter-spacing: -0.8px;
+      margin: 14px 0 14px;
+      font-weight: 900;
+    }
+    .sub{
+      color: var(--muted);
+      font-size: clamp(15px, 1.35vw, 18px);
+      line-height: 1.55;
+      max-width: 56ch;
+      margin: 0 0 18px;
+    }
+    .hero-actions{ display:flex; gap: 12px; flex-wrap: wrap; align-items:center; margin: 18px 0 18px; }
+    .hint{ color: var(--muted2); font-size: 13px; line-height:1.4; }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+    }
+
+    .preview{
+      padding: 16px;
+      position: relative;
+      overflow:hidden;
+    }
+    .preview::before{
+      content:"";
+      position:absolute; inset:-120px;
+      background: radial-gradient(320px 220px at 30% 30%, rgba(91,140,255,.30), transparent 60%),
+                  radial-gradient(280px 220px at 70% 40%, rgba(57,217,138,.22), transparent 60%),
+                  radial-gradient(280px 220px at 55% 85%, rgba(247,201,72,.16), transparent 60%);
+      filter: blur(6px);
+      opacity: .9;
+      transform: rotate(-6deg);
+    }
+
+    .phone{
+      position:relative;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.30);
+      overflow:hidden;
+      box-shadow: var(--shadow2);
+    }
+
+    .phone-top{
+      display:flex; justify-content:space-between; align-items:center;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+    }
+    .phone-top .left{ display:flex; align-items:center; gap:8px; }
+    .tg-badge{
+      width: 28px; height:28px; border-radius: 12px;
+      display:grid; place-items:center;
+      background: rgba(91,140,255,.25);
+      border: 1px solid rgba(91,140,255,.35);
+    }
+
+    .phone-top .title{ font-weight:800; font-size: 13px; }
+    .phone-top .subt{ color: var(--muted2); font-size: 12px; margin-top:2px; }
+    .phone-top .right{ color: var(--muted2); font-size: 12px; }
+
+    .feed{ padding: 12px; display:grid; gap: 10px; }
+    .post{
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .post .t{ font-weight:800; font-size: 13px; margin-bottom:6px; }
+    .post .p{ color: var(--muted); font-size: 12.6px; line-height:1.45; }
+    .post .meta{ display:flex; gap:10px; align-items:center; margin-top:10px; color: var(--muted2); font-size: 11.8px; }
+    .chip{ padding: 5px 8px; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); }
+
+    /* Sections */
+    section{ padding: 56px 0; }
+    .section-title{ font-size: 22px; font-weight:900; letter-spacing: -.3px; margin: 0 0 10px; }
+    .section-sub{ color: var(--muted); margin: 0 0 22px; line-height:1.55; max-width: 72ch; }
+
+    .grid-3{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .grid-2{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+    .tile{
+      padding: 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 16px 34px rgba(0,0,0,.25);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .tile:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.075); }
+
+    .tile .icon{
+      width: 44px; height:44px;
+      display:grid; place-items:center;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg, rgba(91,140,255,.22), rgba(57,217,138,.18));
+    }
+    .tile h3{ margin: 0 0 6px; font-size: 15px; font-weight: 900; }
+    .tile p{ margin:0; color: var(--muted); line-height: 1.55; font-size: 13.8px; }
+
+    /* Social proof */
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .stat{
+      padding: 14px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .stat .n{ font-size: 22px; font-weight: 950; letter-spacing: -.3px; }
+    .stat .l{ color: var(--muted2); font-size: 12.5px; margin-top: 4px; }
+
+    /* Testimonials */
+    .quote{
+      padding: 16px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      position:relative;
+    }
+    .quote::before{
+      content:"“";
+      position:absolute; left: 12px; top: 0px;
+      font-size: 44px;
+      color: rgba(255,255,255,.18);
+      font-weight: 900;
+    }
+    .quote p{ margin: 18px 0 12px; color: var(--muted); line-height:1.6; }
+    .who{ display:flex; align-items:center; gap:10px; }
+    .avatar{
+      width: 34px; height:34px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(247,201,72,.55), rgba(91,140,255,.35));
+      border: 1px solid rgba(255,255,255,.16);
+    }
+    .who .nm{ font-weight: 900; font-size: 13px; }
+    .who .role{ color: var(--muted2); font-size: 12px; }
+
+    /* FAQ */
+    details{
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 14px 14px;
+    }
+    details + details{ margin-top: 10px; }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 14.5px;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .faq-a{ color: var(--muted); line-height:1.6; margin: 10px 0 0; font-size: 13.8px; }
+
+    /* Final CTA */
+    .final{
+      padding: 26px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(91,140,255,.20), rgba(57,217,138,.16));
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: var(--shadow);
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items:center;
+      overflow:hidden;
+      position:relative;
+    }
+    .final::after{
+      content:"";
+      position:absolute; right:-120px; top:-120px;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle at 30% 30%, rgba(247,201,72,.30), transparent 60%),
+                  radial-gradient(circle at 70% 60%, rgba(57,217,138,.25), transparent 60%);
+      filter: blur(10px);
+      opacity:.9;
+      transform: rotate(12deg);
+    }
+    .final h3{ margin:0 0 8px; font-size: 20px; font-weight: 950; letter-spacing:-.25px; }
+    .final p{ margin:0; color: var(--muted); line-height:1.6; }
+
+    footer{ padding: 28px 0 40px; color: var(--muted2); font-size: 13px; }
+    .foot{ display:flex; justify-content:space-between; align-items:center; gap: 12px; flex-wrap: wrap; }
+    .foot a{ color: rgba(255,255,255,.70); }
+    .foot a:hover{ color: rgba(255,255,255,.90); }
+
+    /* Small utilities */
+    .row{ display:flex; gap: 10px; align-items:center; flex-wrap:wrap; }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      background: rgba(0,0,0,.26);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.78);
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .nav-links{ display:none; }
+      .stats{ grid-template-columns: repeat(2, 1fr); }
+      .grid-3{ grid-template-columns: 1fr; }
+      .grid-2{ grid-template-columns: 1fr; }
+      .final{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .noise{ animation:none; }
+      .btn, .tile{ transition:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- ====== NAV ====== -->
+  <header class="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="brand-text">
+            <div class="name" id="channelName">Business & Finance</div>
+            <div class="handle" id="channelHandle">@yourchannel</div>
+          </div>
+        </div>
+
+        <nav class="nav-links" aria-label="Навигация">
+          <a href="#benefits">Что внутри</a>
+          <a href="#proof">Почему стоит</a>
+          <a href="#formats">Форматы</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+
+        <div class="cta">
+          <button class="btn" id="copyLinkBtn" type="button" title="Скопировать ссылку">
+            <span class="kbd">⌘</span>
+            <span>Скопировать</span>
+          </button>
+          <a class="btn btn-primary" id="tgBtn" href="https://t.me/yourchannel" target="_blank" rel="noopener">
+            <span aria-hidden="true">✈️</span>
+            <span>Открыть в Telegram</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====== HERO ====== -->
+  <main>
+    <div class="container">
+      <section class="hero">
+        <div class="hero-grid">
+          <div>
+            <div class="pill"><span class="dot" aria-hidden="true"></span><span id="heroTagline">Ежедневно: бизнес-идеи, деньги, мышление, инструменты</span></div>
+            <h1 class="h1">Бизнес и финансы — так, чтобы было понятно и полезно.</h1>
+            <p class="sub">
+              Короткие разборы, реальная практика, примеры из жизни. Без занудства и без «воздуха».
+              Подпишись — и получай идеи, которые можно применить уже сегодня.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#final">
+                <span aria-hidden="true">🚀</span>
+                <span>Подписаться сейчас</span>
+              </a>
+              <a class="btn" href="#benefits">
+                <span aria-hidden="true">👀</span>
+                <span>Посмотреть, что внутри</span>
+              </a>
+              <span class="hint">Подписка бесплатная • можно отписаться в любой момент</span>
+            </div>
+
+            <div class="stats" id="proof">
+              <div class="stat">
+                <div class="n" data-count="1200">0</div>
+                <div class="l">кратких разборов</div>
+              </div>
+              <div class="stat">
+                <div class="n" data-count="24">0</div>
+                <div class="l">минуты в день</div>
+              </div>
+              <div class="stat">
+                <div class="n" data-count="3">0</div>
+                <div class="l">формата: текст/схемы/чек-листы</div>
+              </div>
+              <div class="stat">
+                <div class="n" data-count="0">0</div>
+                <div class="l">воды и пустых советов</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card preview" aria-label="Превью канала">
+            <div class="phone" role="img" aria-label="Пример ленты Telegram">
+              <div class="phone-top">
+                <div class="left">
+                  <div class="tg-badge" aria-hidden="true">
+                    <!-- Telegram icon (inline SVG) -->
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M21.6 4.6c.3-1.3-.9-2.3-2.1-1.8L3.6 9c-1.4.6-1.3 2.6.2 3l4.1 1.3 1.6 5.1c.4 1.2 1.9 1.6 2.8.7l2.3-2.1 4.4 3.3c1 .7 2.4.2 2.7-1L21.6 4.6Z" fill="rgba(255,255,255,.9)"/>
+                      <path d="M9 13.1 18.3 7.2c.3-.2.6.2.3.5l-7.9 7.3c-.3.3-.5.6-.6 1l-.3 2.4c0 .3-.4.4-.5.1l-1.3-4.3Z" fill="rgba(7,11,20,.65)"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="title" id="phoneTitle">Business & Finance</div>
+                    <div class="subt" id="phoneSub">@yourchannel • 1–2 поста в день</div>
+                  </div>
+                </div>
+                <div class="right" id="phoneTime">Сегодня</div>
+              </div>
+
+              <div class="feed">
+                <div class="post">
+                  <div class="t">📌 5 ошибок, из-за которых деньги «утекают»</div>
+                  <div class="p">Чек-лист: подписки, кредиты, импульсные покупки, хаос в учёте, «скидки ради скидок». В конце — простая схема, как это остановить.</div>
+                  <div class="meta"><span class="chip">Чек-лист</span><span>3 мин</span><span>🔥</span></div>
+                </div>
+                <div class="post">
+                  <div class="t">📊 Как считать прибыль, если ты «самозанятый»</div>
+                  <div class="p">Без сложных формул: доход − прямые расходы − обязательные платежи. Покажу на примере: услуги, товары, смешанный вариант.</div>
+                  <div class="meta"><span class="chip">Разбор</span><span>4 мин</span><span>✅</span></div>
+                </div>
+                <div class="post">
+                  <div class="t">💡 Идея недели: маленький продукт → большой рост</div>
+                  <div class="p">Как собрать оффер за 1 вечер: боль → обещание → результат → гарантия. Плюс примеры для разных ниш.</div>
+                  <div class="meta"><span class="chip">Шаблон</span><span>2 мин</span><span>⚡</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ====== BENEFITS ====== -->
+      <section id="benefits">
+        <h2 class="section-title">Что ты получишь</h2>
+        <p class="section-sub">Три главные вещи: ясность, инструменты и движение вперёд — без перегруза.</p>
+
+        <div class="grid-3">
+          <div class="tile">
+            <div class="icon" aria-hidden="true">🧠</div>
+            <h3>Понятные разборы</h3>
+            <p>Сложное — простыми словами. Каждый пост отвечает на вопрос: «что делать конкретно».</p>
+          </div>
+          <div class="tile">
+            <div class="icon" aria-hidden="true">🧾</div>
+            <h3>Чек-листы и шаблоны</h3>
+            <p>Готовые структуры: бюджет, прибыль, оффер, переговоры, принятие решений.</p>
+          </div>
+          <div class="tile">
+            <div class="icon" aria-hidden="true">📈</div>
+            <h3>Рост без хаоса</h3>
+            <p>Маленькие шаги, которые реально делают результат: дисциплина, система, фокус.</p>
+          </div>
+        </div>
+
+        <div style="height:18px"></div>
+
+        <div class="grid-2">
+          <div class="tile">
+            <div class="icon" aria-hidden="true">💼</div>
+            <h3>Для тех, кто строит доход</h3>
+            <p>Предприниматели, фрилансеры, менеджеры — всем, кто хочет меньше ошибок и больше денег.</p>
+          </div>
+          <div class="tile">
+            <div class="icon" aria-hidden="true">🛡️</div>
+            <h3>Без «инфо-шума»</h3>
+            <p>Никаких «гарантированных доходов». Только разумные принципы и здравый смысл.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== FORMATS ====== -->
+      <section id="formats">
+        <h2 class="section-title">Форматы постов</h2>
+        <p class="section-sub">Чтобы не скучать: иногда текст, иногда схемы, иногда «возьми и сделай».</p>
+
+        <div class="grid-3">
+          <div class="tile">
+            <div class="icon" aria-hidden="true">⚙️</div>
+            <h3>Разборы кейсов</h3>
+            <p>«Было → стало»: что сработало, что нет, и почему. По шагам.</p>
+          </div>
+          <div class="tile">
+            <div class="icon" aria-hidden="true">🗂️</div>
+            <h3>Системы и схемы</h3>
+            <p>Короткие модели, которые помогают думать: приоритеты, риски, решения.</p>
+          </div>
+          <div class="tile">
+            <div class="icon" aria-hidden="true">🧩</div>
+            <h3>Практика</h3>
+            <p>Задания на 10 минут: улучшить бюджет, оффер, переговоры, план.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== TESTIMONIALS ====== -->
+      <section>
+        <h2 class="section-title">Что говорят читатели</h2>
+        <p class="section-sub">Тексты ниже — шаблон. Можешь заменить на реальные отзывы (скриншоты/цитаты).</p>
+
+        <div class="grid-3">
+          <div class="quote">
+            <p>«Начал вести учёт по твоей схеме — впервые понял, куда реально уходит зарплата. За месяц нашёл +12% экономии.»</p>
+            <div class="who">
+              <div class="avatar" aria-hidden="true"></div>
+              <div>
+                <div class="nm">Алексей</div>
+                <div class="role">Менеджер</div>
+              </div>
+            </div>
+          </div>
+          <div class="quote">
+            <p>«Кайф, что без воды. Прочитал пост → сделал действие. Наконец-то полезный канал.»</p>
+            <div class="who">
+              <div class="avatar" aria-hidden="true"></div>
+              <div>
+                <div class="nm">Мария</div>
+                <div class="role">Фриланс</div>
+              </div>
+            </div>
+          </div>
+          <div class="quote">
+            <p>«Шаблон оффера реально помог. Закрыл 2 клиента, потому что стало понятно, что обещать и как.»</p>
+            <div class="who">
+              <div class="avatar" aria-hidden="true"></div>
+              <div>
+                <div class="nm">Денис</div>
+                <div class="role">Предприниматель</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== FAQ ====== -->
+      <section id="faq">
+        <h2 class="section-title">FAQ</h2>
+        <p class="section-sub">Чтобы снять сомнения до подписки.</p>
+
+        <details open>
+          <summary>Это платно? <span aria-hidden="true">＋</span></summary>
+          <div class="faq-a">Нет. Канал бесплатный. Иногда могут быть рекламные посты или рекомендации, но без спама.</div>
+        </details>
+        <details>
+          <summary>Сколько постов в неделю? <span aria-hidden="true">＋</span></summary>
+          <div class="faq-a">Обычно 1–2 поста в день. Если тема сложная — может быть серия коротких сообщений.</div>
+        </details>
+        <details>
+          <summary>Для новичков подойдёт? <span aria-hidden="true">＋</span></summary>
+          <div class="faq-a">Да. Я делаю упор на понятность и практику. Если встречается термин — сразу объясняю и показываю пример.</div>
+        </details>
+        <details>
+          <summary>Что насчёт инвестиций? <span aria-hidden="true">＋</span></summary>
+          <div class="faq-a">Будут принципы, риск-менеджмент и здравые подходы. Не будет обещаний «быстро разбогатеть».</div>
+        </details>
+      </section>
+
+      <!-- ====== FINAL CTA ====== -->
+      <section id="final">
+        <div class="final">
+          <div style="position:relative; z-index:1;">
+            <h3>Готов? Подписывайся — и забирай пользу из каждого поста.</h3>
+            <p>Один клик — и ты в канале. Если не зайдёт — спокойно отписываешься.</p>
+            <div style="height:14px"></div>
+            <div class="row">
+              <a class="btn btn-primary" id="tgBtn2" href="https://t.me/yourchannel" target="_blank" rel="noopener">
+                <span aria-hidden="true">✈️</span>
+                <span>Перейти в Telegram</span>
+              </a>
+              <button class="btn" id="copyLinkBtn2" type="button">
+                <span aria-hidden="true">🔗</span>
+                <span>Скопировать ссылку</span>
+              </button>
+              <span class="hint">Ссылка: <span class="kbd" id="tgLinkText">t.me/yourchannel</span></span>
+            </div>
+          </div>
+
+          <div style="position:relative; z-index:1;">
+            <div class="tile" style="background: rgba(0,0,0,.18);">
+              <h3 style="margin:0 0 8px; font-size:15px;">Мини‑бонус после подписки</h3>
+              <p style="margin:0;">Пин‑пост с «системой денег»: учёт → контроль → рост. Плюс шаблон бюджета в 1 страницу.</p>
+              <div style="height:10px"></div>
+              <div class="row">
+                <span class="pill"><span class="dot" aria-hidden="true" style="background: var(--brand3); box-shadow: 0 0 0 6px rgba(247,201,72,.10);"></span><span>Пин‑пост</span></span>
+                <span class="pill"><span class="dot" aria-hidden="true" style="background: var(--brand2); box-shadow: 0 0 0 6px rgba(91,140,255,.10);"></span><span>Шаблон</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="foot">
+          <div>© <span id="year"></span> <span id="ownerName">Автор канала</span>. Все права защищены.</div>
+          <div class="row">
+            <a href="#" id="policyLink">Политика</a>
+            <span aria-hidden="true">•</span>
+            <a href="#" id="contactsLink">Контакты</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    // ====== Настрой под себя (один раз) ======
+    const CFG = {
+      CHANNEL_NAME: "Business & Finance",
+      CHANNEL_HANDLE: "@yourchannel",
+      TG_LINK: "https://t.me/yourchannel",
+      HERO_TAGLINE: "Ежедневно: бизнес-идеи, деньги, мышление, инструменты",
+      OWNER_NAME: "Автор канала",
+    };
+
+    // Apply config
+    const $ = (id) => document.getElementById(id);
+    $("channelName").textContent = CFG.CHANNEL_NAME;
+    $("phoneTitle").textContent = CFG.CHANNEL_NAME;
+
+    $("channelHandle").textContent = CFG.CHANNEL_HANDLE;
+    $("phoneSub").textContent = `${CFG.CHANNEL_HANDLE} • 1–2 поста в день`;
+
+    $("heroTagline").textContent = CFG.HERO_TAGLINE;
+    $("ownerName").textContent = CFG.OWNER_NAME;
+
+    // Links
+    const tgBtns = [$("tgBtn"), $("tgBtn2")];
+    tgBtns.forEach((b) => b && b.setAttribute("href", CFG.TG_LINK));
+    $("tgLinkText").textContent = CFG.TG_LINK.replace("https://", "");
+
+    // Copy link
+    async function copyTG(){
+      try{
+        await navigator.clipboard.writeText(CFG.TG_LINK);
+        toast("Ссылка скопирована ✅");
+      }catch(e){
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = CFG.TG_LINK;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        toast("Ссылка скопирована ✅");
+      }
+    }
+
+    $("copyLinkBtn").addEventListener("click", copyTG);
+    $("copyLinkBtn2").addEventListener("click", copyTG);
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href');
+        if(!href || href === '#') return;
+        const el = document.querySelector(href);
+        if(!el) return;
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Animated counters on view
+    const counters = document.querySelectorAll('[data-count]');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if(!entry.isIntersecting) return;
+        const el = entry.target;
+        const to = Number(el.getAttribute('data-count') || 0);
+        animateCount(el, to);
+        io.unobserve(el);
+      });
+    }, { threshold: .45 });
+
+    counters.forEach((c) => io.observe(c));
+
+    function animateCount(el, to){
+      const from = 0;
+      const dur = 850;
+      const start = performance.now();
+
+      function fmt(n){
+        // Простое форматирование: 1200 -> 1 200
+        return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+      }
+
+      function tick(t){
+        const p = Math.min(1, (t - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(from + (to - from) * eased);
+        if(p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // Mini toast
+    let toastTimer;
+    function toast(text){
+      clearTimeout(toastTimer);
+      let el = document.getElementById('toast');
+      if(!el){
+        el = document.createElement('div');
+        el.id = 'toast';
+        el.style.cssText = `
+          position: fixed;
+          left: 50%;
+          bottom: 18px;
+          transform: translateX(-50%);
+          padding: 10px 12px;
+          border-radius: 14px;
+          background: rgba(0,0,0,.55);
+          border: 1px solid rgba(255,255,255,.16);
+          color: rgba(255,255,255,.92);
+          font-weight: 800;
+          font-size: 13px;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 18px 40px rgba(0,0,0,.35);
+          z-index: 999;
+          opacity: 0;
+          transition: opacity .18s ease;
+        `;
+        document.body.appendChild(el);
+      }
+      el.textContent = text;
+      requestAnimationFrame(() => el.style.opacity = '1');
+      toastTimer = setTimeout(() => { el.style.opacity = '0'; }, 1200);
+    }
+
+    // Year + "Today" label
+    $("year").textContent = new Date().getFullYear();
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    $("phoneTime").textContent = `${hh}:${mm}`;
+
+    // Optional placeholders
+    $("policyLink").addEventListener('click', (e) => { e.preventDefault(); toast('Добавь ссылку на политику 😉'); });
+    $("contactsLink").addEventListener('click', (e) => { e.preventDefault(); toast('Добавь контакты/почту 😉'); });
+  </script>
+</body>
+</html>

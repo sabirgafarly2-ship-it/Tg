@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Планы и цели</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-soft: #1f2937;
+      --border: #374151;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #22c55e;
+      --accent-2: #06b6d4;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(160deg, #0f172a 0%, #111827 50%, #0b1022 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .app {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 36px); }
+    p { margin: 0; color: var(--muted); }
+
+    form {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 16px;
+    }
+
+    input, select, button {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      color: var(--text);
+      padding: 11px 12px;
+      font-size: 14px;
+    }
+
+    input::placeholder { color: #94a3b8; }
+
+    button {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .stat {
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .stat .value { font-size: 26px; font-weight: 800; }
+    .stat .label { color: var(--muted); font-size: 13px; }
+
+    .list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: rgba(31, 41, 55, 0.55);
+      display: grid;
+      gap: 10px;
+    }
+
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 12px;
+      background: #243045;
+      border: 1px solid #3d4c63;
+      border-radius: 999px;
+      padding: 3px 10px;
+      color: #cbd5e1;
+    }
+
+    .meta { color: var(--muted); font-size: 13px; }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .progress-wrap {
+      flex: 1;
+      min-width: 180px;
+      background: #0b1220;
+      border-radius: 999px;
+      border: 1px solid #293346;
+      height: 12px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #06b6d4);
+      transition: width 0.25s ease;
+    }
+
+    .small-btn {
+      width: auto;
+      background: var(--panel-soft);
+      border: 1px solid var(--border);
+      font-weight: 600;
+      padding: 8px 10px;
+    }
+
+    .small-btn.delete {
+      border-color: #7f1d1d;
+      color: #fecaca;
+      background: #3b0f14;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <h1>Планировщик целей</h1>
+      <p>Добавляй планы и цели, отмечай прогресс и продолжай с того места, где остановился.</p>
+
+      <form id="goal-form">
+        <input id="goal-title" type="text" placeholder="Например: Сдать экзамен" required maxlength="120" />
+        <input id="goal-note" type="text" placeholder="Короткое описание (необязательно)" maxlength="220" />
+        <select id="goal-type">
+          <option value="Цель">Цель</option>
+          <option value="План">План</option>
+        </select>
+        <input id="goal-target" type="number" min="1" max="100" value="100" required />
+        <button type="submit">Добавить</button>
+      </form>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="value" id="stat-total">0</div>
+          <div class="label">Всего записей</div>
+        </div>
+        <div class="stat">
+          <div class="value" id="stat-done">0</div>
+          <div class="label">Завершено</div>
+        </div>
+        <div class="stat">
+          <div class="value" id="stat-progress">0%</div>
+          <div class="label">Средний прогресс</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 style="margin:0 0 8px;">Твои планы и цели</h2>
+      <p style="margin-bottom:12px;">Все данные сохраняются в браузере (localStorage).</p>
+      <div id="goal-list" class="list"></div>
+      <div id="empty" class="empty">Пока пусто. Добавь первую цель или план.</div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'goal_planner_items_v1';
+
+    const form = document.getElementById('goal-form');
+    const titleInput = document.getElementById('goal-title');
+    const noteInput = document.getElementById('goal-note');
+    const typeInput = document.getElementById('goal-type');
+    const targetInput = document.getElementById('goal-target');
+
+    const list = document.getElementById('goal-list');
+    const empty = document.getElementById('empty');
+
+    const totalEl = document.getElementById('stat-total');
+    const doneEl = document.getElementById('stat-done');
+    const progressEl = document.getElementById('stat-progress');
+
+    let items = loadItems();
+
+    function loadItems() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveItems() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function clampProgress(value, target) {
+      const safe = Number(value) || 0;
+      const safeTarget = Number(target) || 100;
+      const pct = Math.round((safe / safeTarget) * 100);
+      return Math.max(0, Math.min(100, pct));
+    }
+
+    function setProgress(id, nextValue) {
+      items = items.map(item => {
+        if (item.id !== id) return item;
+        const value = Math.max(0, Number(nextValue) || 0);
+        return { ...item, current: Math.min(value, item.target) };
+      });
+      saveItems();
+      render();
+    }
+
+    function deleteItem(id) {
+      items = items.filter(item => item.id !== id);
+      saveItems();
+      render();
+    }
+
+    function renderStats() {
+      const total = items.length;
+      const done = items.filter(i => clampProgress(i.current, i.target) >= 100).length;
+      const avg = total ? Math.round(items.reduce((sum, i) => sum + clampProgress(i.current, i.target), 0) / total) : 0;
+
+      totalEl.textContent = total;
+      doneEl.textContent = done;
+      progressEl.textContent = avg + '%';
+    }
+
+    function render() {
+      list.innerHTML = '';
+      empty.style.display = items.length ? 'none' : 'block';
+
+      items.forEach(item => {
+        const percent = clampProgress(item.current, item.target);
+
+        const card = document.createElement('article');
+        card.className = 'item';
+
+        card.innerHTML = `
+          <div class="item-top">
+            <div>
+              <strong>${escapeHTML(item.title)}</strong>
+              <div class="meta">${escapeHTML(item.note || 'Без описания')}</div>
+            </div>
+            <span class="badge">${item.type}</span>
+          </div>
+
+          <div class="row">
+            <div class="progress-wrap" aria-label="Прогресс">
+              <div class="progress-bar" style="width:${percent}%"></div>
+            </div>
+            <strong>${percent}%</strong>
+          </div>
+
+          <div class="row">
+            <button class="small-btn" data-action="minus" data-id="${item.id}">-10%</button>
+            <button class="small-btn" data-action="plus" data-id="${item.id}">+10%</button>
+            <button class="small-btn" data-action="done" data-id="${item.id}">Готово</button>
+            <button class="small-btn delete" data-action="delete" data-id="${item.id}">Удалить</button>
+            <span class="meta">${item.current}/${item.target}</span>
+          </div>
+        `;
+
+        list.appendChild(card);
+      });
+
+      renderStats();
+    }
+
+    function escapeHTML(text) {
+      return String(text)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+
+      const title = titleInput.value.trim();
+      const note = noteInput.value.trim();
+      const type = typeInput.value;
+      const target = Math.max(1, Number(targetInput.value) || 100);
+
+      if (!title) return;
+
+      items.unshift({
+        id: crypto.randomUUID(),
+        title,
+        note,
+        type,
+        target,
+        current: 0,
+        createdAt: Date.now()
+      });
+
+      saveItems();
+      form.reset();
+      targetInput.value = 100;
+      render();
+    });
+
+    list.addEventListener('click', event => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+
+      const { action, id } = button.dataset;
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+
+      if (action === 'plus') {
+        setProgress(id, item.current + Math.ceil(item.target * 0.1));
+      } else if (action === 'minus') {
+        setProgress(id, item.current - Math.ceil(item.target * 0.1));
+      } else if (action === 'done') {
+        setProgress(id, item.target);
+      } else if (action === 'delete') {
+        deleteItem(id);
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>

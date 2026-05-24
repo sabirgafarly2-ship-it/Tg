@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Лови квадрат</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+    .card {
+      width: min(92vw, 520px);
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    h1 { margin: 0 0 10px; font-size: 24px; }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    #arena {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #1e293b;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #475569;
+      cursor: crosshair;
+    }
+    #target {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      border-radius: 8px;
+      box-shadow: 0 8px 14px rgba(34,197,94,.35);
+      transition: transform .08s;
+    }
+    #target:active { transform: scale(.95); }
+    .controls {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: none;
+      background: #3b82f6;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    button:hover { background: #2563eb; }
+  </style>
+</head>
+<body>
+  <section class="card">
+    <h1>🎯 Лови квадрат</h1>
+    <div class="info">
+      <span>Очки: <b id="score">0</b></span>
+      <span>Время: <b id="time">20</b> сек</span>
+    </div>
+    <div id="arena">
+      <div id="target" aria-label="цель"></div>
+    </div>
+    <div class="controls">
+      <button id="startBtn">Начать заново</button>
+    </div>
+  </section>
+
+  <script>
+    const arena = document.getElementById('arena');
+    const target = document.getElementById('target');
+    const scoreNode = document.getElementById('score');
+    const timeNode = document.getElementById('time');
+    const startBtn = document.getElementById('startBtn');
+
+    let score = 0;
+    let timeLeft = 20;
+    let timerId = null;
+    let gameActive = false;
+
+    function placeTarget() {
+      const maxX = arena.clientWidth - target.offsetWidth;
+      const maxY = arena.clientHeight - target.offsetHeight;
+      target.style.left = `${Math.random() * maxX}px`;
+      target.style.top = `${Math.random() * maxY}px`;
+    }
+
+    function finishGame() {
+      gameActive = false;
+      clearInterval(timerId);
+      timerId = null;
+      alert(`⏰ Время вышло! Ваш результат: ${score}`);
+    }
+
+    function startGame() {
+      score = 0;
+      timeLeft = 20;
+      gameActive = true;
+      scoreNode.textContent = score;
+      timeNode.textContent = timeLeft;
+      placeTarget();
+
+      clearInterval(timerId);
+      timerId = setInterval(() => {
+        timeLeft -= 1;
+        timeNode.textContent = timeLeft;
+        if (timeLeft <= 0) finishGame();
+      }, 1000);
+    }
+
+    target.addEventListener('click', () => {
+      if (!gameActive) return;
+      score += 1;
+      scoreNode.textContent = score;
+      placeTarget();
+    });
+
+    startBtn.addEventListener('click', startGame);
+    window.addEventListener('resize', () => gameActive && placeTarget());
+
+    startGame();
+  </script>
+</body>
+</html>

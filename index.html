@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#070b10" />
+<title>Финансовый помощник</title>
+<style>
+:root{--bg:#070b10;--card:#101923d9;--card2:#152232;--line:#ffffff14;--text:#f5f7fb;--muted:#92a0b2;--green:#39f2a0;--green2:#16bd78;--green3:#0d9b5a;--yellow:#ffd166;--red:#ff5d76;--orange:#ff9f43;--blue:#64b5ff;--purple:#a78bfa;--r:24px;--shadow:0 22px 70px #0008;--glow-green:0 0 40px #39f2a018;--glow-blue:0 0 40px #64b5ff18}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 80% 50% at 15% 0%,#39f2a012,transparent),radial-gradient(ellipse 60% 40% at 85% 5%,#64b5ff10,transparent),radial-gradient(ellipse 50% 30% at 50% 100%,#a78bfa08,transparent);pointer-events:none;z-index:0}
+
+.wrap{width:min(1200px,calc(100% - 24px));margin:auto;padding:16px 0 60px;position:relative;z-index:1}
+h1,h2,h3,p{margin:0}
+
+/* ─── Sticky Header ─── */
+.top{position:sticky;top:10px;z-index:100;display:flex;justify-content:space-between;gap:14px;align-items:center;padding:14px 20px;border:1px solid var(--line);border-radius:28px;background:rgba(7,11,16,.85);backdrop-filter:blur(24px) saturate(1.4);box-shadow:var(--shadow);transition:box-shadow .3s}
+.top:hover{box-shadow:var(--shadow),var(--glow-green)}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,#39f2a030,#64b5ff18);border:1px solid #39f2a040;font-weight:900;font-size:22px;position:relative;overflow:hidden;transition:transform .3s}
+.logo::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,#fff1 60%,transparent);opacity:0;transition:opacity .4s}
+.logo:hover{transform:scale(1.08)}
+.logo:hover::after{opacity:1}
+h1{font-size:clamp(20px,3vw,28px);letter-spacing:-.04em;font-weight:800}
+.sub,.note{color:var(--muted);font-size:13px;line-height:1.45;margin-top:4px}
+.nav{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.nav a,button,.file{border:1px solid var(--line);background:#ffffff0c;color:var(--text);border-radius:999px;padding:10px 14px;font:inherit;font-size:13px;text-decoration:none;cursor:pointer;transition:all .22s ease;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+.nav a::before,button::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#ffffff08,transparent);opacity:0;transition:opacity .2s}
+.nav a:hover::before,button:hover::before{opacity:1}
+.nav a:hover,button:hover{transform:translateY(-1px);background:#ffffff14;border-color:#ffffff28}
+.nav a:active,button:active{transform:translateY(0) scale(.97)}
+
+/* ─── Buttons ─── */
+.primary{background:linear-gradient(135deg,var(--green),var(--green2));color:#04110a;font-weight:800;border:0;box-shadow:0 4px 20px #39f2a030;position:relative;overflow:hidden}
+.primary::after{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(135deg,transparent 40%,#ffffff20 50%,transparent 60%);transform:rotate(45deg);transition:transform .6s}
+.primary:hover::after{transform:rotate(45deg) translateY(-100%)}
+.primary:hover{box-shadow:0 6px 30px #39f2a040;transform:translateY(-2px)}
+.danger{color:#ffdce2;background:#ff5d7614;border-color:#ff5d7635}
+.danger:hover{background:#ff5d7624;border-color:#ff5d7650}
+.ghost{background:#ffffff08}
+.small{padding:7px 10px;font-size:12px}
+
+/* ─── Layout ─── */
+.grid{display:grid;gap:14px}
+.hero{grid-template-columns:1.3fr .7fr;margin-top:16px}
+.two{grid-template-columns:.95fr 1.05fr;margin-top:14px}
+.cards3{grid-template-columns:repeat(3,1fr)}
+.stats{grid-template-columns:repeat(2,1fr)}
+
+/* ─── Cards ─── */
+.card,.box{border:1px solid var(--line);background:linear-gradient(180deg,#ffffff0a,#ffffff04),var(--card);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(16px);transition:border-color .3s,box-shadow .3s}
+.card:hover,.box:hover{border-color:#ffffff20;box-shadow:var(--shadow),0 0 60px #39f2a008}
+.card{padding:22px;min-height:150px;position:relative;overflow:hidden}
+.card::after{content:"";position:absolute;right:-80px;top:-80px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,#39f2a010,transparent 70%);pointer-events:none}
+.box{padding:20px;margin-top:14px}
+
+/* ─── Typography ─── */
+.label{color:var(--muted);font-size:13px;font-weight:500}
+.value{font-size:clamp(28px,5vw,44px);letter-spacing:-.055em;font-weight:850;line-height:1.08;margin-top:10px;background:linear-gradient(135deg,var(--text),#c8d4e4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.value.sm{font-size:clamp(24px,4vw,34px)}
+.green{background:linear-gradient(135deg,var(--green),#a0ffd0)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}
+.yellow{background:linear-gradient(135deg,var(--yellow),#ffe4a0)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}
+.red{background:linear-gradient(135deg,var(--red),#ffa0b0)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}
+.blue{background:linear-gradient(135deg,var(--blue),#a0d4ff)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}
+
+/* ─── Pills ─── */
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.between{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.pills{margin-top:14px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 12px;border:1px solid var(--line);background:#ffffff0a;color:#c2ccd8;font-size:12px;font-weight:500;transition:all .2s}
+.ok{background:#39f2a010;border-color:#39f2a035;color:#caffea}
+.warn{background:#ffd16614;border-color:#ffd16640;color:#fff0c2}
+.risk{background:#ff5d7614;border-color:#ff5d7640;color:#ffdce2}
+
+/* ─── Progress ─── */
+.progress{height:10px;background:#ffffff0c;border-radius:999px;overflow:hidden;border:1px solid #ffffff0a}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:999px;transition:width .8s cubic-bezier(.22,.61,.36,1);position:relative}
+.fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#ffffff20,transparent);animation:shimmer 2s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* ─── Forms ─── */
+form{display:grid;gap:11px}
+.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.field{display:grid;gap:7px}
+.field span{font-size:13px;color:#bcc7d6;font-weight:500}
+input,select,textarea{width:100%;border:1px solid #ffffff14;background:#080d14cc;color:var(--text);border-radius:15px;padding:12px 14px;font:inherit;outline:0;transition:all .25s}
+textarea{min-height:72px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:#39f2a060;box-shadow:0 0 0 4px #39f2a010,0 0 20px #39f2a008}
+input::placeholder,textarea::placeholder{color:#ffffff30}
+.err{min-height:18px;color:#ffd7df;font-size:13px}
+
+/* ─── Search ─── */
+.searchWrap{position:relative;margin-bottom:12px}
+.searchWrap input{padding-left:38px}
+.searchWrap::before{content:"🔍";position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.5;pointer-events:none}
+
+/* ─── Lists ─── */
+.list{display:grid;gap:10px;margin-top:13px}
+.item,.stat,.insight,.bar,.rule{border:1px solid #ffffff0c;background:#ffffff06;border-radius:18px;padding:14px;transition:all .25s}
+.item:hover{border-color:#ffffff18;background:#ffffff0a;transform:translateY(-1px)}
+.stat{transition:all .25s}
+.stat:hover{border-color:#39f2a030;background:#39f2a008}
+.stat b,.rule b{display:block;margin-top:5px;font-size:17px;letter-spacing:-.02em;font-weight:700}
+
+/* ─── Operations ─── */
+.op{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.opmain{display:flex;gap:12px;align-items:center;min-width:0}
+.ico{width:40px;height:40px;flex:0 0 40px;border-radius:14px;background:linear-gradient(135deg,#ffffff0c,#ffffff06);display:grid;place-items:center;font-size:18px;border:1px solid #ffffff0a;transition:all .3s}
+.item:hover .ico{background:linear-gradient(135deg,#ffffff14,#ffffff0a);transform:scale(1.05)}
+.title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{font-size:12px;color:var(--muted);margin-top:3px}
+.sum{text-align:right;font-weight:850;font-size:15px}
+
+/* ─── Category Bars ─── */
+.barTop{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-bottom:8px}
+.track{height:8px;background:#ffffff0a;border-radius:999px;overflow:hidden}
+.track span{display:block;height:100%;border-radius:999px;transition:width .8s cubic-bezier(.22,.61,.36,1)}
+
+/* ─── Goals ─── */
+.goalActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.goalUpdate{display:grid;grid-template-columns:1fr auto;gap:8px}
+.dataActions{display:flex;flex-wrap:wrap;gap:10px}
+.empty{border:1px dashed #ffffff1a;border-radius:18px;padding:18px;color:var(--muted);line-height:1.5;background:#ffffff04;text-align:center}
+
+/* ─── Health Score ─── */
+.healthWrap{display:flex;align-items:center;justify-content:center;padding:20px 0}
+.healthCircle{position:relative;width:160px;height:160px}
+.healthCircle svg{width:100%;height:100%;transform:rotate(-90deg)}
+.healthCircle .track-ring{fill:none;stroke:#ffffff0a;stroke-width:8}
+.healthCircle .score-ring{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.2s cubic-bezier(.22,.61,.36,1),stroke .4s}
+.healthLabel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.healthNum{font-size:42px;font-weight:900;letter-spacing:-.04em;line-height:1}
+.healthText{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
+
+/* ─── Donut Chart ─── */
+.donutWrap{display:flex;align-items:center;justify-content:center;padding:16px 0}
+.donutChart{position:relative;width:180px;height:180px}
+.donutChart svg{width:100%;height:100%;transform:rotate(-90deg)}
+.donutCenter{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donutTotal{font-size:20px;font-weight:800;letter-spacing:-.03em}
+.donutLabel{font-size:11px;color:var(--muted);margin-top:2px}
+.legend{display:grid;gap:6px;margin-top:10px}
+.legendItem{display:flex;align-items:center;gap:8px;font-size:13px}
+.legendDot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* ─── Sparkline ─── */
+.sparkWrap{margin-top:14px;padding:4px 0}
+.sparkWrap svg{width:100%;height:50px;overflow:visible}
+.sparkLine{fill:none;stroke:var(--green);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sparkArea{fill:url(#sparkGrad);opacity:.3}
+.sparkDot{fill:var(--green);r:3;transition:r .2s}
+.sparkWrap svg:hover .sparkDot:last-of-type{r:5}
+
+/* ─── Toast ─── */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;background:rgba(17,27,39,.95);border:1px solid #ffffff1a;border-radius:16px;padding:14px 20px;box-shadow:var(--shadow),0 0 40px #00000040;transition:all .35s cubic-bezier(.22,.61,.36,1);z-index:200;max-width:calc(100% - 32px);text-align:center;backdrop-filter:blur(20px);display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast .ticon{font-size:18px}
+
+/* ─── Section Headers ─── */
+.sectionHead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.sectionHead .sico{width:32px;height:32px;border-radius:12px;display:grid;place-items:center;font-size:16px;border:1px solid #ffffff10}
+
+/* ─── Animations ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.fadeUp{animation:fadeUp .6s cubic-bezier(.22,.61,.36,1) both}
+.fadeIn{animation:fadeIn .5s ease both}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}.d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.3s}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#ffffff18;border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:#ffffff28}
+
+/* ─── Responsive ─── */
+@media(max-width:900px){
+.top{position:relative;top:0;align-items:flex-start;flex-direction:column;gap:12px}
+.hero,.two{grid-template-columns:1fr}
+.cards3{grid-template-columns:1fr}
+.nav{justify-content:flex-start}
+}
+@media(max-width:640px){
+.wrap{width:calc(100% - 14px);padding-top:8px}
+.box,.card,.top{border-radius:20px}
+.formgrid,.stats{grid-template-columns:1fr}
+.op{grid-template-columns:1fr}
+.sum{text-align:left}
+.goalUpdate{grid-template-columns:1fr}
+.donutChart{width:150px;height:150px}
+.healthCircle{width:130px;height:130px}
+.healthNum{font-size:34px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══ HEADER ═══ -->
+<header class="top fadeUp">
+  <div class="brand">
+    <div class="logo">₽</div>
+    <div>
+      <h1>Финансовый помощник</h1>
+      <p class="sub" id="period">Бюджет, расходы, цели и прогноз</p>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="#ops">Операции</a>
+    <a href="#analytics">Аналитика</a>
+    <a href="#goals">Цели</a>
+    <a href="#budget">Бюджет</a>
+    <a href="#data">Данные</a>
+  </nav>
+</header>
+
+<!-- ═══ DASHBOARD ═══ -->
+<section class="grid hero fadeUp d1">
+  <div class="card">
+    <p class="label">Доступный бюджет</p>
+    <div class="value" id="available">0 ₽</div>
+    <div class="row pills">
+      <span class="pill" id="incomePill">Доход: 0 ₽</span>
+      <span class="pill" id="spentPill">Потрачено: 0 ₽</span>
+      <span class="pill" id="leftPill">Остаток: 0 ₽</span>
+    </div>
+    <div class="sparkWrap" id="sparkWrap">
+      <svg viewBox="0 0 300 50" preserveAspectRatio="none">
+        <defs><linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--green)" stop-opacity="0.3"/><stop offset="100%" stop-color="var(--green)" stop-opacity="0"/></linearGradient></defs>
+        <path class="sparkArea" id="sparkArea" d=""/>
+        <path class="sparkLine" id="sparkLine" d=""/>
+      </svg>
+    </div>
+  </div>
+  <div class="card">
+    <p class="label">Суточный лимит</p>
+    <div class="value sm" id="daily">0 ₽ / день</div>
+    <div class="row pills">
+      <span class="pill" id="dailyStatus">Статус</span>
+      <span class="pill" id="daysLeft">0 дней</span>
+    </div>
+    <div class="healthWrap">
+      <div class="healthCircle">
+        <svg viewBox="0 0 100 100">
+          <circle class="track-ring" cx="50" cy="50" r="42"/>
+          <circle class="score-ring" id="healthRing" cx="50" cy="50" r="42" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+        </svg>
+        <div class="healthLabel">
+          <div class="healthNum" id="healthNum">0</div>
+          <div class="healthText">здоровье</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ACTIVE GOAL ═══ -->
+<section class="box fadeUp d2">
+  <div class="between">
+    <div>
+      <p class="label">Активная цель</p>
+      <h2 id="activeName">Цель не выбрана</h2>
+    </div>
+    <span class="pill" id="activeStatus">Добавь цель</span>
+  </div>
+  <div class="progress" style="margin-top:14px"><div class="fill" id="activeFill"></div></div>
+  <div class="grid stats" id="activeStats" style="margin-top:13px"></div>
+</section>
+
+<!-- ═══ OPERATIONS ═══ -->
+<section class="grid two fadeUp d3" id="ops">
+  <div class="box">
+    <div class="sectionHead"><div class="sico" style="background:#39f2a010;border-color:#39f2a030">+</div><h2>Добавить операцию</h2></div>
+    <p class="note">Доходы и расходы обновляют лимит, аналитику и прогноз.</p>
+    <form id="txForm" novalidate style="margin-top:14px">
+      <div class="formgrid">
+        <label class="field"><span>Тип</span>
+          <select id="txType"><option value="expense">Расход</option><option value="income">Доход</option></select>
+        </label>
+        <label class="field"><span>Сумма, ₽</span>
+          <input id="txAmount" type="number" min="1" step="1" placeholder="1 200">
+        </label>
+        <label class="field"><span>Категория</span>
+          <select id="txCat"></select>
+        </label>
+        <label class="field"><span>Дата</span>
+          <input id="txDate" type="date">
+        </label>
+      </div>
+      <label class="field"><span>Описание</span>
+        <textarea id="txDesc" placeholder="Например: продукты, метро, покупка"></textarea>
+      </label>
+      <div class="err" id="txErr"></div>
+      <button class="primary">Добавить операцию</button>
+    </form>
+  </div>
+  <div class="box">
+    <div class="sectionHead"><div class="sico" style="background:#64b5ff10;border-color:#64b5ff30">📋</div><h2>Последние операции</h2></div>
+    <p class="note">Показываются последние 15 операций.</p>
+    <div class="searchWrap" style="margin-top:12px">
+      <input id="txSearch" type="text" placeholder="Поиск по описанию или категории...">
+    </div>
+    <select id="filter" style="max-width:210px;margin-bottom:8px">
+      <option value="all">Все категории</option>
+    </select>
+    <div class="list" id="txList"></div>
+  </div>
+</section>
+
+<!-- ═══ ANALYTICS ═══ -->
+<section class="box fadeUp d4" id="analytics">
+  <div class="between">
+    <div class="sectionHead"><div class="sico" style="background:#a78bfa10;border-color:#a78bfa30">📊</div><h2>Аналитика</h2></div>
+    <span class="pill" id="anStatus">Обновлено</span>
+  </div>
+  <p class="note">Расчеты за текущий расчетный месяц.</p>
+
+  <div class="grid stats" style="margin-top:14px">
+    <div class="stat"><span class="label">Общие траты</span><b id="totalExp">0 ₽</b></div>
+    <div class="stat"><span class="label">Средний расход / день</span><b id="avgDay">0 ₽</b></div>
+    <div class="stat"><span class="label">Самый дорогой день</span><b id="maxDay">Нет данных</b></div>
+    <div class="stat"><span class="label">Топ-категория</span><b id="topCat">Нет данных</b></div>
+    <div class="stat"><span class="label">Количество операций</span><b id="opCount">0</b></div>
+    <div class="stat"><span class="label">Прогноз остатка</span><b id="miniLeft">0 ₽</b></div>
+  </div>
+
+  <div class="grid two" style="margin-top:16px">
+    <div>
+      <h3 style="margin-bottom:4px">Структура расходов</h3>
+      <div class="donutWrap"><div class="donutChart"><svg viewBox="0 0 100 100" id="donutSvg"></svg><div class="donutCenter"><div class="donutTotal" id="donutTotal">0 ₽</div><div class="donutLabel">всего</div></div></div></div>
+      <div class="legend" id="donutLegend"></div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:4px">Категории</h3>
+      <div class="list" id="catBars"></div>
+      <h3 style="margin-top:18px;margin-bottom:4px">Наблюдения</h3>
+      <div class="list" id="insights"></div>
+    </div>
+  </div>
+
+  <div class="item" style="margin-top:16px">
+    <div class="between">
+      <div><h3>Математический прогноз</h3><p class="note">Средний расход × дни в месяце</p></div>
+      <span class="pill" id="forecastStatus">Статус</span>
+    </div>
+    <div class="grid stats" style="margin-top:13px">
+      <div class="stat"><span class="label">Средний расход</span><b id="fAvg">0 ₽ / день</b></div>
+      <div class="stat"><span class="label">Прогноз трат</span><b id="fTotal">0 ₽</b></div>
+      <div class="stat"><span class="label">Ожидаемый остаток</span><b id="fLeft">0 ₽</b></div>
+      <div class="stat"><span class="label">Рекомендация</span><b id="fAdvice">Добавь бюджет</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GOALS ═══ -->
+<section class="grid two fadeUp d5" id="goals">
+  <div class="box">
+    <div class="sectionHead"><div class="sico" style="background:#ffd16610;border-color:#ffd16630">🎯</div><h2>Создать цель</h2></div>
+    <p class="note">Приложение покажет, сколько нужно откладывать в день и месяц.</p>
+    <form id="goalForm" novalidate style="margin-top:14px">
+      <label class="field"><span>Название</span><input id="gName" placeholder="MacBook"></label>
+      <div class="formgrid">
+        <label class="field"><span>Нужная сумма, ₽</span><input id="gTarget" type="number" min="1" step="1"></label>
+        <label class="field"><span>Уже собрано, ₽</span><input id="gSaved" type="number" min="0" step="1" value="0"></label>
+        <label class="field"><span>Срок</span><input id="gDate" type="date"></label>
+        <label class="field"><span>Сделать активной</span><select id="gActive"><option value="yes">Да</option><option value="no">Нет</option></select></label>
+      </div>
+      <div class="err" id="gErr"></div>
+      <button class="primary">Создать цель</button>
+    </form>
+  </div>
+  <div class="box">
+    <div class="sectionHead"><div class="sico" style="background:#39f2a010;border-color:#39f2a030">📌</div><h2>Мои цели</h2></div>
+    <p class="note">Выбери активную цель, обнови сумму или удали.</p>
+    <div class="list" id="goalList"></div>
+  </div>
+</section>
+
+<!-- ═══ BUDGET ═══ -->
+<section class="box fadeUp d6" id="budget">
+  <div class="sectionHead"><div class="sico" style="background:#64b5ff10;border-color:#64b5ff30">💰</div><h2>Бюджет</h2></div>
+  <p class="note">50/30/20: 50% — обязательные, 30% — желания, 20% — накопления.</p>
+  <div class="grid two" style="margin-top:14px">
+    <form id="budgetForm" novalidate>
+      <div class="formgrid">
+        <label class="field"><span>Оклад, ₽</span><input id="salary" type="number" min="0" step="1"></label>
+        <label class="field"><span>Доп. доходы, ₽</span><input id="extra" type="number" min="0" step="1"></label>
+        <label class="field"><span>Обязательные расходы, ₽</span><input id="fixed" type="number" min="0" step="1"></label>
+        <label class="field"><span>Откладывать, ₽</span><input id="saveWant" type="number" min="0" step="1"></label>
+        <label class="field"><span>Текущие накопления, ₽</span><input id="current" type="number" min="0" step="1"></label>
+        <label class="field"><span>День начала месяца</span><input id="startDay" type="number" min="1" max="31" step="1"></label>
+      </div>
+      <div class="err" id="bErr"></div>
+      <button class="primary">Сохранить бюджет</button>
+    </form>
+    <div>
+      <div class="grid stats">
+        <div class="stat"><span class="label">Месячный доход</span><b id="bIncome">0 ₽</b></div>
+        <div class="stat"><span class="label">Откладывать</span><b id="bSave">0 ₽</b></div>
+        <div class="stat"><span class="label">На расходы</span><b id="bSpend">0 ₽</b></div>
+        <div class="stat"><span class="label">Суточный лимит</span><b id="bDaily">0 ₽ / день</b></div>
+      </div>
+      <div class="grid cards3" style="margin-top:12px">
+        <div class="rule"><span class="label">50% обязательные</span><b id="rNeed">0 ₽</b></div>
+        <div class="rule"><span class="label">30% желания</span><b id="rWant">0 ₽</b></div>
+        <div class="rule"><span class="label">20% накопления</span><b id="rSave">0 ₽</b></div>
+      </div>
+      <div class="list" id="ruleText"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DATA ═══ -->
+<section class="box fadeUp d6" id="data">
+  <div class="sectionHead"><div class="sico" style="background:#ffffff10;border-color:#ffffff20">⚙️</div><h2>Данные</h2></div>
+  <p class="note">Данные хранятся в localStorage этого браузера.</p>
+  <div class="dataActions" style="margin-top:14px">
+    <button class="ghost" id="exportBtn">Экспорт JSON</button>
+    <label class="file ghost" for="importFile" style="display:inline-flex;align-items:center;cursor:pointer">Импорт JSON</label>
+    <input id="importFile" type="file" accept="application/json,.json" hidden>
+    <button class="ghost" id="clearDemo">Очистить демо</button>
+    <button class="danger" id="resetAll">Сбросить всё</button>
+  </div>
+</section>
+
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"><span class="ticon" id="ticon">✓</span><span id="ttext"></span></div>
+
+<script>
+const KEY="money.app.v2";
+const expCats=["еда","транспорт","жилье","связь","развлечения","покупки","здоровье","обучение","долги","другое"];
+const incCats=["зарплата","подработка","подарок","возврат","другое"];
+const icons={еда:"🍽️",транспорт:"🚕",жилье:"🏠",связь:"📱",развлечения:"🎮",покупки:"🛍️",здоровье:"💊",обучение:"📚",долги:"📌",другое:"•",зарплата:"💼",подработка:"⚙️",подарок:"🎁",возврат:"↩️"};
+const catColors=["#39f2a0","#64b5ff","#ffd166","#ff5d76","#a78bfa","#ff9f43","#f472b6","#34d399","#60a5fa","#94a3b8"];
+const needs=new Set(["еда","транспорт","жилье","связь","здоровье","долги"]);
+const wants=new Set(["развлечения","покупки"]);
+const $=id=>document.getElementById(id);
+let st=load();
+
+document.addEventListener("DOMContentLoaded",()=>{defaults();bind();render()});
+
+function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function iso(d=new Date()){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function date(s){if(!s)return null;const[y,m,d]=s.split("-").map(Number);return y&&m&&d?new Date(y,m-1,d,12):null}
+function days(a,b){return Math.round((new Date(b.getFullYear(),b.getMonth(),b.getDate(),12)-new Date(a.getFullYear(),a.getMonth(),a.getDate(),12))/864e5)}
+function add(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function dim(y,m){return new Date(y,m+1,0).getDate()}
+function startOf(y,m,day){return new Date(y,m,Math.min(day,dim(y,m)),12)}
+function money(n){return new Intl.NumberFormat("ru-RU",{style:"currency",currency:"RUB",maximumFractionDigits:0}).format(Math.round(Number(n)||0))}
+function dformat(x){const v=typeof x==="string"?date(x):x;return v?new Intl.DateTimeFormat("ru-RU").format(v):"—"}
+function sdate(x){const v=typeof x==="string"?date(x):x;return v?new Intl.DateTimeFormat("ru-RU",{day:"2-digit",month:"short"}).format(v):"—"}
+function cap(s){return s?s[0].toUpperCase()+s.slice(1):""}
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[m])}
+function cls(n){return n<0?"red":n<1000?"yellow":"green"}
+function pillCls(level){return"pill "+(level==="risk"?"risk":level==="warn"?"warn":"ok")}
+
+function toast(t,type="ok"){
+  const ic=type==="ok"?"✓":type==="warn"?"⚠":type==="err"?"✕":"ℹ";
+  $("ticon").textContent=ic;
+  $("ttext").textContent=t;
+  $("toast").classList.add("show");
+  clearTimeout(window._tt);
+  window._tt=setTimeout(()=>$("toast").classList.remove("show"),2400);
+}
+
+function load(){try{const raw=localStorage.getItem(KEY);return raw?norm(JSON.parse(raw)):demo()}catch{return demo()}}
+function save(){localStorage.setItem(KEY,JSON.stringify(st))}
+function empty(){return{budget:{salary:0,extra:0,fixed:0,wantSave:0,current:0,startDay:1,demo:false},tx:[],goals:[],active:null,settings:{demo:false}}}
+function norm(x){const e=empty();return{budget:{...e.budget,...(x.budget||{})},tx:Array.isArray(x.tx)?x.tx:[],goals:Array.isArray(x.goals)?x.goals:[],active:x.active||null,settings:{...e.settings,...(x.settings||{})}}}
+
+function demo(){
+  const now=new Date(),first=new Date(now.getFullYear(),now.getMonth(),1,12);
+  const day=n=>iso(add(first,n));
+  let dl=new Date(now.getFullYear(),11,31,12);
+  if(dl<now)dl.setFullYear(dl.getFullYear()+1);
+  const gid=uid();
+  return{
+    budget:{salary:110000,extra:12000,fixed:45000,wantSave:20000,current:45000,startDay:1,demo:true},
+    tx:[
+      {id:uid(),type:"expense",amount:8500,cat:"еда",desc:"Продукты на неделю",date:day(1),demo:true},
+      {id:uid(),type:"expense",amount:2100,cat:"еда",desc:"Доставка еды",date:day(3),demo:true},
+      {id:uid(),type:"expense",amount:3200,cat:"транспорт",desc:"Такси и метро",date:day(4),demo:true},
+      {id:uid(),type:"expense",amount:1400,cat:"связь",desc:"Мобильная связь",date:day(5),demo:true},
+      {id:uid(),type:"expense",amount:14500,cat:"покупки",desc:"Одежда",date:day(7),demo:true},
+      {id:uid(),type:"expense",amount:2200,cat:"связь",desc:"Интернет",date:day(9),demo:true},
+      {id:uid(),type:"expense",amount:5600,cat:"еда",desc:"Ресторан",date:day(10),demo:true},
+      {id:uid(),type:"expense",amount:3900,cat:"развлечения",desc:"Кафе и кино",date:day(12),demo:true},
+      {id:uid(),type:"expense",amount:1800,cat:"здоровье",desc:"Аптека",date:day(13),demo:true},
+      {id:uid(),type:"expense",amount:4200,cat:"обучение",desc:"Курс по дизайну",date:day(14),demo:true},
+      {id:uid(),type:"income",amount:110000,cat:"зарплата",desc:"Зарплата",date:day(5),demo:true},
+    ],
+    goals:[{id:gid,name:"MacBook Pro",target:180000,saved:45000,deadline:iso(dl),demo:true}],
+    active:gid,
+    settings:{demo:true}
+  }
+}
+
+function defaults(){
+  fillCats();
+  $("txDate").value=iso();
+  const g=new Date();g.setMonth(g.getMonth()+6);
+  $("gDate").value=iso(g);
+  fillBudget();
+}
+
+function fillCats(){
+  const arr=$("txType").value==="income"?incCats:expCats;
+  $("txCat").innerHTML=arr.map(c=>`<option value="${c}">${cap(c)}</option>`).join("");
+  $("filter").innerHTML='<option value="all">Все категории</option>'+[...new Set([...expCats,...incCats])].map(c=>`<option value="${c}">${cap(c)}</option>`).join("");
+}
+
+function fillBudget(){
+  const b=st.budget;
+  $("salary").value=b.salary||"";
+  $("extra").value=b.extra||"";
+  $("fixed").value=b.fixed||"";
+  $("saveWant").value=b.wantSave||"";
+  $("current").value=b.current||"";
+  $("startDay").value=b.startDay||1;
+}
+
+function bind(){
+  $("txType").onchange=fillCats;
+  $("filter").onchange=renderTx;
+  $("txSearch").oninput=renderTx;
+  $("txForm").onsubmit=addTx;
+  $("goalForm").onsubmit=addGoal;
+  $("budgetForm").onsubmit=saveBudget;
+  $("exportBtn").onclick=exportData;
+  $("importFile").onchange=importData;
+  $("clearDemo").onclick=clearDemo;
+  $("resetAll").onclick=resetAll;
+  document.addEventListener("click",e=>{
+    const b=e.target.closest("button[data-act]");
+    if(!b)return;
+    const act=b.dataset.act,idv=b.dataset.id;
+    if(act==="delTx")delTx(idv);
+    if(act==="delGoal")delGoal(idv);
+    if(act==="active")setActive(idv);
+    if(act==="updGoal")updGoal(idv);
+  });
+}
+
+function period(){
+  const sd=Math.min(31,Math.max(1,Number(st.budget.startDay)||1));
+  const now=new Date();
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate(),12);
+  const cur=startOf(today.getFullYear(),today.getMonth(),sd);
+  const start=today>=cur?cur:startOf(today.getFullYear(),today.getMonth()-1,sd);
+  const next=startOf(start.getFullYear(),start.getMonth()+1,sd);
+  const end=add(next,-1);
+  return{start,end,total:Math.max(1,days(start,end)+1),passed:Math.max(1,days(start,today)+1),left:Math.max(1,days(today,end)+1)};
+}
+
+function metrics(){
+  const p=period();
+  const inP=st.tx.filter(x=>{const d=date(x.date);return d&&d>=p.start&&d<=p.end});
+  const ex=inP.filter(x=>x.type==="expense");
+  const inc=inP.filter(x=>x.type==="income");
+  const exp=ex.reduce((a,x)=>a+x.amount,0);
+  const income=Number(st.budget.salary||0)+Number(st.budget.extra||0)+inc.reduce((a,x)=>a+x.amount,0);
+  const saveWant=Number(st.budget.wantSave||0);
+  const available=income-exp-saveWant;
+  const avg=exp/p.passed;
+  const forecast=avg*p.total;
+  const left=income-forecast-saveWant;
+
+  const dayMap={},catMap={};
+  ex.forEach(x=>{dayMap[x.date]=(dayMap[x.date]||0)+x.amount;catMap[x.cat]=(catMap[x.cat]||0)+x.amount});
+  const maxDay=Object.entries(dayMap).sort((a,b)=>b[1]-a[1])[0];
+  const cats=Object.entries(catMap).map(([cat,amount])=>({cat,amount,pct:exp?amount/exp*100:0})).sort((a,b)=>b.amount-a.amount);
+  const wantSpent=ex.filter(x=>wants.has(x.cat)).reduce((a,x)=>a+x.amount,0);
+
+  const dailySpending=[];
+  for(let i=0;i<p.passed&&i<30;i++){
+    const d=iso(add(p.start,i));
+    dailySpending.push(dayMap[d]||0);
+  }
+
+  return{p,inP,ex,inc,exp,income,saveWant,available,daily:available/p.left,avg,forecast,left,maxDay,cats,top:cats[0],wantSpent,dayMap,dailySpending};
+}
+
+function healthScore(m){
+  let score=100;
+  if(m.income<=0)return 0;
+  const spendRatio=m.exp/m.income;
+  if(spendRatio>1)score-=40;
+  else if(spendRatio>.8)score-=20;
+  else if(spendRatio>.6)score-=10;
+  if(m.available<0)score-=25;
+  else if(m.available<m.income*.1)score-=15;
+  if(m.daily<0)score-=15;
+  else if(m.daily<300)score-=8;
+  const saveRatio=m.saveWant/m.income;
+  if(saveRatio>=.2)score+=5;
+  else if(saveRatio<.1)score-=5;
+  if(m.left<0)score-=10;
+  return Math.max(0,Math.min(100,Math.round(score)));
+}
+
+function render(){
+  fillBudget();
+  renderDash();
+  renderActive();
+  renderTx();
+  renderAnalytics();
+  renderGoals();
+  renderBudget();
+  renderDemoBtn();
+}
+
+function renderDash(){
+  const m=metrics();
+  $("period").textContent=`${dformat(m.p.start)} — ${dformat(m.p.end)}`;
+  $("available").textContent=money(m.available);
+  $("available").className="value "+cls(m.available);
+  $("incomePill").textContent=`Доход: ${money(m.income)}`;
+  $("spentPill").textContent=`Потрачено: ${money(m.exp)}`;
+  $("leftPill").textContent=`Остаток: ${money(m.available)}`;
+  $("leftPill").className=pillCls(m.available<0?"risk":m.available<5000?"warn":"ok");
+  $("daily").textContent=`${money(m.daily)} / день`;
+  $("daily").className="value sm "+cls(m.daily);
+
+  const stt=m.daily<0?["risk","Денег не хватает"]:m.daily<500?["warn","Лимит почти нулевой"]:m.avg&&m.daily<m.avg*.7?["warn","Темп расходов высокий"]:["ok","Лимит в норме"];
+  $("dailyStatus").textContent=stt[1];
+  $("dailyStatus").className=pillCls(stt[0]);
+  $("daysLeft").textContent=`${m.p.left} дн. осталось`;
+
+  const hs=healthScore(m);
+  const circ=263.9;
+  const offset=circ-(circ*hs/100);
+  const ring=$("healthRing");
+  ring.style.strokeDashoffset=offset;
+  ring.style.stroke=hs>=70?"var(--green)":hs>=40?"var(--yellow)":"var(--red)";
+  $("healthNum").textContent=hs;
+  $("healthNum").className="healthNum "+(hs>=70?"green":hs>=40?"yellow":"red");
+
+  renderSparkline(m.dailySpending);
+}
+
+function renderSparkline(data){
+  if(!data.length){$("sparkLine").setAttribute("d","");$("sparkArea").setAttribute("d","");return}
+  const w=300,h=50,pad=2;
+  const max=Math.max(...data,1);
+  const pts=data.map((v,i)=>{
+    const x=data.length>1?pad+i*(w-2*pad)/(data.length-1):w/2;
+    const y=h-pad-(v/max)*(h-2*pad);
+    return[x,y];
+  });
+  let d="M"+pts.map(p=>p.join(",")).join("L");
+  $("sparkLine").setAttribute("d",d);
+  const area=d+`L${pts[pts.length-1][0]},${h}L${pts[0][0]},${h}Z`;
+  $("sparkArea").setAttribute("d",area);
+}
+
+function ginfo(g){
+  const dl=date(g.deadline);
+  const rem=Math.max(0,g.target-g.saved);
+  const prog=g.target?Math.min(100,Math.round(g.saved/g.target*100)):0;
+  const dleft=dl?Math.max(0,days(new Date(),dl)+1):0;
+  const perDay=dleft>0?rem/dleft:rem;
+  const perMonth=rem/Math.max(dleft/30.44,1);
+  const m=metrics();
+  let level="ok",text="Реалистично";
+  if(dleft<=0&&rem>0){level="risk";text="Срок прошёл"}
+  else if(!rem){text="Достигнута!"}
+  else if(perDay>Math.max(m.daily,0)){level="risk";text="Нужно слишком много"}
+  else if(perDay>Math.max(m.daily,0)*.45||dleft<45){level="warn";text="Срок напряженный"}
+  return{rem,prog,dleft,perDay,perMonth,level,text};
+}
+
+function renderActive(){
+  const g=st.goals.find(x=>x.id===st.active);
+  const box=$("activeStats");
+  if(!g){
+    $("activeName").textContent="Цель не выбрана";
+    $("activeFill").style.width="0%";
+    $("activeStatus").textContent="Добавь цель";
+    $("activeStatus").className="pill warn";
+    box.innerHTML='<div class="empty">Создай цель ниже — здесь появится прогресс и рекомендации.</div>';
+    return;
+  }
+  const i=ginfo(g);
+  $("activeName").textContent=g.name;
+  $("activeFill").style.width=i.prog+"%";
+  $("activeStatus").textContent=i.text;
+  $("activeStatus").className=pillCls(i.level);
+  box.innerHTML=`
+    <div class="stat"><span class="label">Собрано</span><b>${money(g.saved)} из ${money(g.target)}</b></div>
+    <div class="stat"><span class="label">Осталось</span><b>${money(i.rem)}</b></div>
+    <div class="stat"><span class="label">Срок</span><b>до ${dformat(g.deadline)}</b></div>
+    <div class="stat"><span class="label">Прогресс</span><b>${i.prog}%</b></div>
+    <div class="stat"><span class="label">В месяц</span><b>${money(i.perMonth)}</b></div>
+    <div class="stat"><span class="label">В день</span><b>${money(i.perDay)}</b></div>`;
+}
+
+function renderTx(){
+  const f=$("filter").value||"all";
+  const q=($("txSearch").value||"").toLowerCase().trim();
+  let arr=[...st.tx]
+    .filter(x=>f==="all"||x.cat===f)
+    .filter(x=>!q||x.desc?.toLowerCase().includes(q)||x.cat?.toLowerCase().includes(q))
+    .sort((a,b)=>date(b.date)-date(a.date))
+    .slice(0,15);
+
+  $("txList").innerHTML=arr.length?arr.map(x=>`
+    <article class="item op">
+      <div class="opmain">
+        <div class="ico">${icons[x.cat]||"•"}</div>
+        <div style="min-width:0">
+          <div class="title">${esc(x.desc||cap(x.cat))}</div>
+          <div class="meta">${sdate(x.date)} · ${cap(x.cat)}${x.demo?" · демо":""}</div>
+        </div>
+      </div>
+      <div>
+        <div class="sum ${x.type==="income"?"green":"red"}">${x.type==="income"?"+":"−"}${money(x.amount)}</div>
+        <div class="row" style="justify-content:flex-end;margin-top:6px">
+          <button class="danger small" data-act="delTx" data-id="${x.id}">Удалить</button>
+        </div>
+      </div>
+    </article>`).join(""):'<div class="empty">Операций пока нет. Добавь первый доход или расход.</div>';
+}
+
+function renderDonut(cats,total){
+  const svg=$("donutSvg");
+  const legend=$("donutLegend");
+  if(!cats.length){
+    svg.innerHTML='<circle cx="50" cy="50" r="38" fill="none" stroke="#ffffff0a" stroke-width="12"/>';
+    legend.innerHTML="";
+    $("donutTotal").textContent="0 ₽";
+    return;
+  }
+  const r=38,circ=2*Math.PI*r;
+  let offset=0,html="";
+  let legendHtml="";
+  cats.forEach((c,i)=>{
+    const frac=c.amount/total;
+    const dash=frac*circ;
+    const gap=circ-dash;
+    const color=catColors[i%catColors.length];
+    html+=`<circle cx="50" cy="50" r="${r}" fill="none" stroke="${color}" stroke-width="12" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-offset}" style="transition:stroke-dasharray .8s,stroke-dashoffset .8s"/>`;
+    offset+=dash;
+    legendHtml+=`<div class="legendItem"><div class="legendDot" style="background:${color}"></div>${icons[c.cat]||"•"} ${cap(c.cat)} — ${money(c.amount)} (${Math.round(c.pct)}%)</div>`;
+  });
+  svg.innerHTML=html;
+  legend.innerHTML=legendHtml;
+  $("donutTotal").textContent=money(total);
+}
+
+function renderAnalytics(){
+  const m=metrics();
+  $("totalExp").textContent=money(m.exp);
+  $("avgDay").textContent=`${money(m.avg)} / день`;
+  $("maxDay").textContent=m.maxDay?`${sdate(m.maxDay[0])} · ${money(m.maxDay[1])}`:"Нет данных";
+  $("topCat").textContent=m.top?`${cap(m.top.cat)} · ${money(m.top.amount)}`:"Нет данных";
+  $("opCount").textContent=m.inP.length;
+  $("miniLeft").textContent=money(m.left);
+  $("miniLeft").className=cls(m.left);
+
+  renderDonut(m.cats,m.exp);
+
+  $("catBars").innerHTML=m.cats.length?m.cats.map((c,i)=>`
+    <div class="bar">
+      <div class="barTop"><strong>${icons[c.cat]||"•"} ${cap(c.cat)}</strong><span>${money(c.amount)} · ${Math.round(c.pct)}%</span></div>
+      <div class="track"><span style="width:${Math.min(100,c.pct)}%;background:${catColors[i%catColors.length]}"></span></div>
+    </div>`).join(""):'<div class="empty">Расходов пока нет.</div>';
+
+  const ins=[];
+  if(!m.exp){
+    ins.push("Добавь расходы — появится аналитика.");
+  }else{
+    if(m.top)ins.push(`Больше всего — <strong>${cap(m.top.cat)}</strong>: ${Math.round(m.top.pct)}% расходов.`);
+    const ent=m.cats.find(c=>c.cat==="развлечения");
+    if(ent&&ent.pct>30)ins.push("Развлечения > 30% трат. Стоит ограничить.");
+    ins.push(`Средний расход: <strong>${money(m.avg)}</strong> в день.`);
+    if(m.left>=0)ins.push(`Прогноз остатка: <strong>${money(m.left)}</strong>.`);
+    else ins.push(`При текущем темпе бюджет уйдёт в минус на <strong>${money(Math.abs(m.left))}</strong>.`);
+  }
+  if(m.available<0)ins.push("Бюджет в минусе: расходы превышают доходы.");
+  $("insights").innerHTML=ins.map(x=>`<div class="insight">${x}</div>`).join("");
+
+  const lvl=m.left<0?"risk":m.left<m.income*.08?"warn":"ok";
+  $("anStatus").textContent=lvl==="risk"?"Есть риск":"В норме";
+  $("anStatus").className=pillCls(lvl);
+  renderForecast(m);
+}
+
+function renderForecast(m){
+  $("fAvg").textContent=`${money(m.avg)} / день`;
+  $("fTotal").textContent=money(m.forecast);
+  $("fLeft").textContent=money(m.left);
+  $("fLeft").className=cls(m.left);
+  let lvl="ok",status="Всё хорошо",advice="При текущем темпе денег хватит.";
+  if(m.left<0){lvl="risk";status="Риск";advice="Деньги закончатся раньше конца месяца."}
+  else if(m.left<m.income*.08){lvl="warn";status="Осторожно";advice="Расходы близки к лимиту. Снизь траты."}
+  $("forecastStatus").textContent=status;
+  $("forecastStatus").className=pillCls(lvl);
+  $("fAdvice").textContent=advice;
+}
+
+function renderGoals(){
+  if(!st.goals.length){
+    $("goalList").innerHTML='<div class="empty">Целей нет. Создай — техника, отпуск или резерв.</div>';
+    return;
+  }
+  $("goalList").innerHTML=st.goals.map(g=>{
+    const i=ginfo(g),a=g.id===st.active;
+    return`
+    <article class="item grid">
+      <div class="between">
+        <div>
+          <h3>${esc(g.name)} ${a?'<span class="pill ok">Активная</span>':''}</h3>
+          <p class="note">${money(g.saved)} из ${money(g.target)} · до ${dformat(g.deadline)}</p>
+        </div>
+        <span class="${pillCls(i.level)}">${i.text}</span>
+      </div>
+      <div class="progress"><div class="fill" style="width:${i.prog}%"></div></div>
+      <div class="grid stats">
+        <div class="stat"><span class="label">Прогресс</span><b>${i.prog}%</b></div>
+        <div class="stat"><span class="label">В день</span><b>${money(i.perDay)}</b></div>
+        <div class="stat"><span class="label">В месяц</span><b>${money(i.perMonth)}</b></div>
+        <div class="stat"><span class="label">Осталось дней</span><b>${i.dleft}</b></div>
+      </div>
+      <div class="goalUpdate">
+        <input data-goal-input="${g.id}" type="number" min="0" max="${g.target}" step="1" value="${g.saved}">
+        <button class="ghost" data-act="updGoal" data-id="${g.id}">Обновить</button>
+      </div>
+      <div class="goalActions">
+        <button class="ghost small" data-act="active" data-id="${g.id}" ${a?"disabled":""}>Сделать активной</button>
+        <button class="danger small" data-act="delGoal" data-id="${g.id}">Удалить</button>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+function renderBudget(){
+  const m=metrics(),b=st.budget;
+  const base=Number(b.salary||0)+Number(b.extra||0);
+  const rn=base*.5,rw=base*.3,rs=base*.2;
+  $("bIncome").textContent=money(base);
+  $("bSave").textContent=money(b.wantSave);
+  $("bSpend").textContent=money(base-b.wantSave);
+  $("bDaily").textContent=`${money(m.daily)} / день`;
+  $("rNeed").textContent=money(rn);
+  $("rWant").textContent=money(rw);
+  $("rSave").textContent=money(rs);
+  const txt=[cmp("Обязательные",b.fixed||0,rn),cmp("Накопления",b.wantSave||0,rs)];
+  if(m.wantSpent)txt.push(cmp("Желания (факт)",m.wantSpent,rw));
+  if(Number(b.wantSave)>rs)txt.push("Откладываешь больше 20% — свободный бюджет будет ниже.");
+  $("ruleText").innerHTML=txt.map(x=>`<div class="insight">${x}</div>`).join("");
+}
+
+function cmp(name,actual,rule){
+  const diff=actual-rule;
+  return`${name}: ${money(actual)} vs ${money(rule)} по правилу. ${diff>=0?"Выше":"Ниже"} на ${money(Math.abs(diff))}.`;
+}
+
+function addTx(e){
+  e.preventDefault();
+  const amount=Number($("txAmount").value),cat=$("txCat").value,dt=$("txDate").value,desc=$("txDesc").value.trim(),type=$("txType").value;
+  if(!amount||amount<=0)return $("txErr").textContent="Укажи сумму больше нуля.";
+  if(!dt||!date(dt))return $("txErr").textContent="Укажи корректную дату.";
+  st.tx.push({id:uid(),type,amount:Math.round(amount),cat,desc:desc||(type==="income"?"Доход":"Расход"),date:dt,demo:false});
+  save();e.target.reset();$("txType").value="expense";$("txDate").value=iso();fillCats();$("txErr").textContent="";render();toast("Операция добавлена");
+}
+
+function delTx(x){st.tx=st.tx.filter(t=>t.id!==x);save();render();toast("Операция удалена","warn")}
+
+function addGoal(e){
+  e.preventDefault();
+  const name=$("gName").value.trim(),target=Number($("gTarget").value),saved=Number($("gSaved").value),deadline=$("gDate").value;
+  if(!name)return $("gErr").textContent="Укажи название.";
+  if(!target||target<=0)return $("gErr").textContent="Сумма должна быть больше нуля.";
+  if(!Number.isFinite(saved)||saved<0)return $("gErr").textContent="Собранная сумма не может быть отрицательной.";
+  if(saved>target)return $("gErr").textContent="Собрано не может быть больше цели.";
+  if(!deadline||!date(deadline))return $("gErr").textContent="Укажи корректный срок.";
+  const gid=uid();
+  st.goals.push({id:gid,name,target:Math.round(target),saved:Math.round(saved),deadline,demo:false});
+  if($("gActive").value==="yes"||!st.active)st.active=gid;
+  save();e.target.reset();$("gSaved").value=0;
+  const d=new Date();d.setMonth(d.getMonth()+6);$("gDate").value=iso(d);
+  $("gErr").textContent="";render();toast("Цель создана");
+}
+
+function delGoal(x){st.goals=st.goals.filter(g=>g.id!==x);if(st.active===x)st.active=st.goals[0]?.id||null;save();render();toast("Цель удалена","warn")}
+function setActive(x){st.active=x;save();render();toast("Активная цель обновлена")}
+
+function updGoal(x){
+  const g=st.goals.find(v=>v.id===x);
+  const inp=document.querySelector(`[data-goal-input="${x}"]`);
+  const v=Number(inp.value);
+  if(!g)return;
+  if(!Number.isFinite(v)||v<0)return toast("Укажи сумму от 0 ₽","err");
+  if(v>g.target)return toast("Сумма не может быть больше цели","err");
+  g.saved=Math.round(v);save();render();toast("Накопления обновлены");
+}
+
+function saveBudget(e){
+  e.preventDefault();
+  const vals=["salary","extra","fixed","saveWant","current"].map(x=>Number($(x).value||0));
+  const sd=Number($("startDay").value||1);
+  if(vals.some(v=>!Number.isFinite(v)||v<0))return $("bErr").textContent="Все суммы должны быть нулем или больше.";
+  if(!Number.isInteger(sd)||sd<1||sd>31)return $("bErr").textContent="День начала: от 1 до 31.";
+  st.budget={salary:Math.round(vals[0]),extra:Math.round(vals[1]),fixed:Math.round(vals[2]),wantSave:Math.round(vals[3]),current:Math.round(vals[4]),startDay:sd,demo:false};
+  save();$("bErr").textContent="";render();toast("Бюджет сохранён");
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify(st,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=`finance-${iso()}.json`;a.click();
+  URL.revokeObjectURL(url);toast("JSON экспортирован");
+}
+
+function importData(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{st=norm(JSON.parse(r.result));save();defaults();render();toast("Данные импортированы")}catch{toast("Ошибка импорта","err")}finally{e.target.value=""}};
+  r.readAsText(f);
+}
+
+function renderDemoBtn(){
+  const has=st.budget.demo||st.tx.some(x=>x.demo)||st.goals.some(x=>x.demo);
+  $("clearDemo").disabled=!has;
+  $("clearDemo").textContent=has?"Очистить демо":"Демо очищено";
+}
+
+function clearDemo(){
+  const has=st.budget.demo||st.tx.some(x=>x.demo)||st.goals.some(x=>x.demo);
+  if(!has)return;
+  if(!confirm("Удалить демо-данные?"))return;
+  st.tx=st.tx.filter(x=>!x.demo);
+  st.goals=st.goals.filter(x=>!x.demo);
+  if(!st.goals.some(g=>g.id===st.active))st.active=st.goals[0]?.id||null;
+  if(st.budget.demo)st.budget=empty().budget;
+  st.settings.demo=false;
+  save();defaults();render();toast("Демо-данные очищены","warn");
+}
+
+function resetAll(){
+  if(!confirm("Удалить все данные?"))return;
+  st=empty();save();defaults();render();toast("Все данные сброшены","warn");
+}
+</script>
+</body>
+</html>
